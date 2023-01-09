@@ -99,7 +99,7 @@ deleteOrderButton = ttk.Button(insideFram2,text="حــذف",bootstyle = "danger
 deleteOrderButton.configure(width=10)
 deleteOrderButton.place(x = 130,y=30,anchor='center')
 # ------------------------------------
-ordersFram.place(x=xOfOrderFram,y=yOfOrderFram,width=widthOfOrderFram,height=heightOfOrderFram)
+# ordersFram.place(x=xOfOrderFram,y=yOfOrderFram,width=widthOfOrderFram,height=heightOfOrderFram)
 # ------------------------------------------------
 # قسم الطلبات 
 deriverFram = ttk.LabelFrame(win,text="  قـسـم  اضـافـة  سائــق  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
@@ -146,7 +146,7 @@ deleteOrderButton = ttk.Button(insideDeriverFram2,text="حــذف",bootstyle = 
 deleteOrderButton.configure(width=10)
 deleteOrderButton.place(x = 130,y=30,anchor='n')
 # --------------------------------------
-deriverFram.place(x=xOfderiverFram,y=yOfderiverFram,width=widthOfderiverFram,height=heightOfderiverFram)
+# deriverFram.place(x=xOfderiverFram,y=yOfderiverFram,width=widthOfderiverFram,height=heightOfderiverFram)
 # ------------------------------------
 # قسم البحث والفلترة
 filterFram = ttk.LabelFrame(win,text="  قـســـم فلتــرة الطلبــات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
@@ -169,27 +169,51 @@ choiceyear.config(width=18)
 choiceyearVar.set("اختـار السنــة")
 choiceyear.grid(row=0,column=0,padx=xpad,pady=ypad)
 # ----------------------------------------------
-filterFram.place(x=xOffilterFram,y=yOffilterFram,width=widthOffilterFram,height=heightOffilterFram)
+# filterFram.place(x=xOffilterFram,y=yOffilterFram,width=widthOffilterFram,height=heightOffilterFram)
 # ----------------------------------------------
 #عرض الداتا
 # 
 # عرض الطلبات 
-# orderTableFram= ttk.Frame(win)
-# orderTable = ttk.Treeview(orderTableFram,columns=["1","2"],show=["headings"],)
-# orderTable.heading("1",text="1")
-# orderTable.columnconfigure("2",weight=10)
-# orderTable.heading("2",text="2")
-# orderTable["show"]="headings"
-# orderTable.pack(fill=BOTH,expand=2)
+orderTableFram= ttk.Frame(win)
+# create scrollx,y
+scrollx = ttk.Scrollbar(orderTableFram,orient="horizontal")
+scrollx.pack(side=BOTTOM,fill=X)
+scrolly = ttk.Scrollbar(orderTableFram,orient="vertical")
+scrolly.pack(side=RIGHT,fill=Y)
+# --------------------------------------------------------
+# create the table
+orderTable = ttk.Treeview(orderTableFram,columns=("date","typeone","typetwo","aprove","dis","tot"),xscrollcommand=scrollx.set,yscrollcommand=scrolly.set)
+# config scrollers
+scrollx.config(command=orderTable.xview)
+scrolly.config(command=orderTable.yview)
+# ------------------------------------
+orderTable.heading("date",text="التــاريــخ")
+orderTable.heading("typeone",text="الداخلــي")
+orderTable.heading("typetwo",text="الخارجــي")
+orderTable.heading("aprove",text="<الحافــز <ج")
+orderTable.heading("dis",text="<الخصــم <ج")
+orderTable.heading("tot",text="مجموع اليوم")
+# orderTable.heading("paid",text="المدفوع")
+# orderTable.heading("remind",text="المتبقي")
+orderTable.column( "date",width=110,anchor=CENTER)
+orderTable.column( "typeone",width=110,anchor=CENTER)
+orderTable.column("typetwo",width=110,anchor=CENTER)
+orderTable.column( "aprove",width=120,anchor=CENTER)
+orderTable.column("dis",width=120,anchor=CENTER)
+orderTable.column("tot",width=130,anchor=CENTER)
+# orderTable.column("paid",width=110,anchor=CENTER)
+# orderTable.column("remind",width=110,anchor=CENTER)
+
+
+orderTable["show"]="headings"
+orderTable.pack(fill=BOTH,expand=2)
 
 
 
 
 
 
-
-
-# orderTableFram.place(x=xOfOrderTableFram,y=yOfOrderTableFram,width=widthoforderTableFram,height=heightoforderTableFram)
+orderTableFram.place(x=xOfOrderTableFram,y=yOfOrderTableFram,width=widthoforderTableFram,height=heightoforderTableFram)
 
 
 win.mainloop()
