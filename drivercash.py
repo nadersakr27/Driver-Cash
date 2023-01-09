@@ -30,21 +30,26 @@ xOffilterFram= 986.6666
 yOffilterFram= 0
 # ---------------------------------------
 widthoforderTableFram = 880
-heightoforderTableFram = 500
+heightoforderTableFram = 350
 xOfOrderTableFram= 53.3
 yOfOrderTableFram= 0
 # ----------------------------------------
 widthofpaidTableFram = 880
-heightofpaidTableFram = 100
+heightofpaidTableFram = 140
 xOfpaidTableFram= 53.3
-yOfpaidTableFram= 500
-# -----------------------------
+yOfpaidTableFram= 350
+# -----------------------------------
+widthofinfoFram = 880
+heightofinfoFram = 280
+xOfinfoFram= 53.3
+yOfinfoFram= 490
+# -----------------------------------
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 win = ttk.Window(resizable=(False, False),title=title)
 win.geometry("1920x990+0+0")
 # قسم الطلبات 
-ordersFram = ttk.LabelFrame(win,text="  قـسـم  اضـافـة  الطلـبـات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
+ordersFram = ttk.LabelFrame(win,text="  اضـافـة  الطلـبـات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
 # المحتويات
 insideFram1 = ttk.Frame(ordersFram,width=widthOfOrderFram)
 insideFram1.pack(side=TOP)
@@ -104,7 +109,7 @@ deleteOrderButton.place(x = 130,y=30,anchor='center')
 ordersFram.place(x=xOfOrderFram,y=yOfOrderFram,width=widthOfOrderFram,height=heightOfOrderFram)
 # ------------------------------------------------
 # قسم الطلبات 
-deriverFram = ttk.LabelFrame(win,text="  قـسـم  اضـافـة  سائــق  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
+deriverFram = ttk.LabelFrame(win,text="  اضـافـة  سائــق  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
 # المحتويات
 insideDeriverFram1 = ttk.Frame(deriverFram,width=widthOfOrderFram)
 insideDeriverFram1.pack(side=TOP)
@@ -151,7 +156,7 @@ deleteOrderButton.place(x = 130,y=30,anchor='n')
 deriverFram.place(x=xOfderiverFram,y=yOfderiverFram,width=widthOfderiverFram,height=heightOfderiverFram)
 # ------------------------------------
 # قسم البحث والفلترة
-filterFram = ttk.LabelFrame(win,text="  قـســـم فلتــرة الطلبــات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
+filterFram = ttk.LabelFrame(win,text="  فلتــرة الطلبــات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
 # المحتويات
 choiceNameVar = ttk.StringVar()
 choiceName = ttk.Combobox(filterFram,state='readonly',textvariable=choiceNameVar,bootstyle='success')
@@ -237,6 +242,12 @@ paidTable.pack(fill=BOTH,expand=2)
 paidTableFram.place(x=xOfpaidTableFram,y=yOfpaidTableFram,width=widthofpaidTableFram,height=heightofpaidTableFram)
 # --------------------------------
 
+
+# عرض البيانات
+infoFram= ttk.Frame(win,relief=RIDGE)
+
+infoFram.place(x=xOfinfoFram,y=yOfinfoFram,width=widthofinfoFram,height=heightofinfoFram)
+# --------------------------------
 
 
 
