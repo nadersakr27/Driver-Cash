@@ -1,11 +1,81 @@
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+
+# ---------------------------------------------
 import sqlite3
-# from tkinter import StringVar
 data = sqlite3.connect("deriverscash.db")
 mycursor  = data.cursor()
-mycursor.execute(" create table if not exists driveresinfo (id varchar(255) not null,name varchar(255) unique null,ideg BigINT NULL, phone varchar(11));")
+mycursor.execute("create table if not exists driveresinfo (name varchar(255) not null,id varchar(14) null,vehicle varchar(20) NULL, phone varchar(11) null);")
 data.commit()
 data.close()
 # -----------------------------------------functions
+#اضافة سائق
+def addingDriver():
+    name = nameEntryvar.get().strip()
+    driverID = idEntryvar.get().strip()
+    phone = phoneEntryvar.get().strip()
+    vehicle = vehicleEntryvar.get().strip()
+    if  (name=='')or not(name[0].isalpha()): #name conditions
+        if (name==''):
+            messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ادخــال اســم السائــق")
+        else :
+            messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ازالــة الارقــام والعلامــات مــن الاســم")
+    else :
+        if (len(driverID)!= 14  or not((driverID).isdigit()) ) and (driverID!=''): #id conditions
+            messagebox.showerror("خطــأ فــي ادخــال رقــم البطــاقــة","برجـاء ادخــال رقــم البطــاقة مكــون من 14 رقــم")
+        else:
+            if ((len(phone)!=11) or not(phone[0]=='0')or not(phone[1]=='1') or not(phone.isdigit()) )and phone!='': #phone conditions
+                messagebox.showerror("خطــأ فــي ادخــال رقــم الهاتــف","برجـاء ادخــال رقــم الهاتــف مكــون من 11 رقــم يبــدء بــ 01")
+            else :
+                if (len(vehicle)>20) :# vechial conditions
+                    messagebox.showerror("خطــأ فــي ادخــال رقــم لوحــة المركبــة","ادخــال لوحــة المركبــة اكبــر مــن الــلازم")
+                else:
+                    # reset 0 to optinal values
+                    if (vehicle==''):
+                        vehicle='0'
+                    if (driverID==''):
+                        driverID ='0'  
+                    if (phone==''):
+                        phone = '0'
+                    #اضافة السائق في قاعدة البيانات
+                    data = sqlite3.connect("deriverscash.db")
+                    mycursor = data.cursor()
+                    # check if there is driver with that name or not
+                    checkMultiplableString = f'select name from driveresinfo where name = "{name}"'
+                    mycursor.execute(checkMultiplableString)
+                    names = mycursor.fetchall()
+                    if len(names) >= 1 :
+                        # if yes message to tryagin
+                        messagebox.showwarning("تكــرار السائــق","يوجــد سائــق بهــذا الاســم")
+                    else:
+                        print(len(names))
+                        stringAddingInfo=f"insert into driveresinfo values('{name}','{driverID}','{vehicle}','{phone}')"
+                        # string Make a Table for driver
+                        driverTable=f"create table {name} (ty1 INT NULL , ty2 INT NULL ,aprove INT NUll , dis INT NULL) "
+                        print(stringAddingInfo)
+                        print(driverTable)
+                        try:
+                            mycursor.execute(stringAddingInfo)
+                            mycursor.execute(driverTable)
+                            messagebox.showinfo("عمليــة ناجحــة","تــم اضافــة السائــق بنجــاح")
+                        except:
+                            messagebox.showerror("خطــأ فــي ادخــال البيانــات","برجـاء مراجعــة البيانــات والمحاولــة مــرة أخــري")
+                    data.commit()
+                    data.close()
+# ------------------------------------------
+def editingInfo():
+    pass
+# -------------------------------------------
+def deleteDriver() :
+    pass
+# -------------------------------------------
+
+
+
+
+
+# -----------------------------------------------
 def but():
     print(dateEntry.entry.get())
 # ===========================================
@@ -44,8 +114,6 @@ heightofinfoFram = 280
 xOfinfoFram= 53.3
 yOfinfoFram= 490
 # -----------------------------------
-import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
 win = ttk.Window(resizable=(False, False),title=title)
 win.geometry("1920x990+0+0")
 # قسم الطلبات 
@@ -141,7 +209,7 @@ vehiclelabel.grid(row=1,column=1,pady=0)
 insideDeriverFram2 = ttk.Frame(deriverFram,width=widthOfOrderFram,height=80)
 insideDeriverFram2.pack()
 # ---------------------------------
-addOrderButton = ttk.Button(insideDeriverFram2,text="اضافــة الســائق",bootstyle = "success",command=but)
+addOrderButton = ttk.Button(insideDeriverFram2,text="اضافــة الســائق",bootstyle = "success",command=addingDriver)
 addOrderButton.configure(width=20)
 addOrderButton.place(x = 640,y=30,anchor='n')
 # -----------------------------------
@@ -189,21 +257,21 @@ scrolly = ttk.Scrollbar(orderTableFram,orient="vertical")
 scrolly.pack(side=RIGHT,fill=Y)
 # --------------------------------------------------------
 # create the table
-orderTable = ttk.Treeview(orderTableFram,columns=("date","typeone","typetwo","aprove","dis","tot"),yscrollcommand=scrolly.set)
+orderTable = ttk.Treeview(orderTableFram,columns=("date","ty1","ty2","aprove","dis","tot"),yscrollcommand=scrolly.set)
 # config scrollers
 # scrollx.config(command=orderTable.xview)
 scrolly.config(command=orderTable.yview)
 # ------------------------------------
 orderTable.heading("date",text="التــاريــخ")
-orderTable.heading("typeone",text="الداخلــي")
-orderTable.heading("typetwo",text="الخارجــي")
+orderTable.heading("ty1",text="الداخلــي")
+orderTable.heading("ty2",text="الخارجــي")
 orderTable.heading("aprove",text="<الحافــز <ج")
 orderTable.heading("dis",text="<الخصــم <ج")
 orderTable.heading("tot",text="مجموع اليوم",)
 # -----------------------------------------------------
 orderTable.column( "date",width=110,anchor=CENTER)
-orderTable.column( "typeone",width=110,anchor=CENTER)
-orderTable.column("typetwo",width=110,anchor=CENTER)
+orderTable.column( "ty1",width=110,anchor=CENTER)
+orderTable.column("ty2",width=110,anchor=CENTER)
 orderTable.column( "aprove",width=120,anchor=CENTER)
 orderTable.column("dis",width=120,anchor=CENTER)
 orderTable.column("tot",width=130,anchor=CENTER)
