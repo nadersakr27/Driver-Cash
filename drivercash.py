@@ -319,7 +319,7 @@ class Drivercash :
             self.driversnames.append(rows[i][0])
         data.commit()
         data.close()
-        self.choicename['values'] = self.driversnames
+        # self.choicename['values'] = self.driversnames
     # ===========================================
 if __name__=="__main__":
     win =  ttk.Window(resizable=(False, False),title=title)
