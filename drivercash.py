@@ -1,325 +1,328 @@
 from tkinter import messagebox
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
-
 # ---------------------------------------------
 import sqlite3
 data = sqlite3.connect("deriverscash.db")
 mycursor  = data.cursor()
-mycursor.execute("create table if not exists driveresinfo (name varchar(255) not null,id varchar(14) null,vehicle varchar(20) NULL, phone varchar(11) null);")
+mycursor.execute("create table if not exists driveresinfo (name varchar(255) not null,id varchar(14) null,vehicle varchar(20) NULL,phone varchar(11) null);")
 data.commit()
 data.close()
-# -----------------------------------------functions
-#اضافة سائق
-def addingDriver():
-    name = nameEntryvar.get().strip()
-    driverID = idEntryvar.get().strip()
-    phone = phoneEntryvar.get().strip()
-    vehicle = vehicleEntryvar.get().strip()
-    if  (name=='')or not(name[0].isalpha()): #name conditions
-        if (name==''):
-            messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ادخــال اســم السائــق")
-        else :
-            messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ازالــة الارقــام والعلامــات مــن الاســم")
-    else :
-        if (len(driverID)!= 14  or not((driverID).isdigit()) ) and (driverID!=''): #id conditions
-            messagebox.showerror("خطــأ فــي ادخــال رقــم البطــاقــة","برجـاء ادخــال رقــم البطــاقة مكــون من 14 رقــم")
-        else:
-            if ((len(phone)!=11) or not(phone[0]=='0')or not(phone[1]=='1') or not(phone.isdigit()) )and phone!='': #phone conditions
-                messagebox.showerror("خطــأ فــي ادخــال رقــم الهاتــف","برجـاء ادخــال رقــم الهاتــف مكــون من 11 رقــم يبــدء بــ 01")
-            else :
-                if (len(vehicle)>20) :# vechial conditions
-                    messagebox.showerror("خطــأ فــي ادخــال رقــم لوحــة المركبــة","ادخــال لوحــة المركبــة اكبــر مــن الــلازم")
-                else:
-                    # reset 0 to optinal values
-                    if (vehicle==''):
-                        vehicle='0'
-                    if (driverID==''):
-                        driverID ='0'  
-                    if (phone==''):
-                        phone = '0'
-                    #اضافة السائق في قاعدة البيانات
-                    data = sqlite3.connect("deriverscash.db")
-                    mycursor = data.cursor()
-                    # check if there is driver with that name or not
-                    checkMultiplableString = f'select name from driveresinfo where name = "{name}"'
-                    mycursor.execute(checkMultiplableString)
-                    names = mycursor.fetchall()
-                    if len(names) >= 1 :
-                        # if yes message to tryagin
-                        messagebox.showwarning("تكــرار السائــق","يوجــد سائــق بهــذا الاســم")
-                    else:
-                        print(len(names))
-                        stringAddingInfo=f"insert into driveresinfo values('{name}','{driverID}','{vehicle}','{phone}')"
-                        # string Make a Table for driver
-                        driverTable=f"create table {name} (ty1 INT NULL , ty2 INT NULL ,aprove INT NUll , dis INT NULL) "
-                        print(stringAddingInfo)
-                        print(driverTable)
-                        try:
-                            mycursor.execute(stringAddingInfo)
-                            mycursor.execute(driverTable)
-                            messagebox.showinfo("عمليــة ناجحــة","تــم اضافــة السائــق بنجــاح")
-                        except:
-                            messagebox.showerror("خطــأ فــي ادخــال البيانــات","برجـاء مراجعــة البيانــات والمحاولــة مــرة أخــري")
-                    data.commit()
-                    data.close()
-# ------------------------------------------
-def editingInfo():
-    pass
-# -------------------------------------------
-def deleteDriver() :
-    pass
-# -------------------------------------------
-
-
-
-
-
-# -----------------------------------------------
-def but():
-    print(dateEntry.entry.get())
-# ===========================================
-title = "DeriverCash"
-# -------------------------------------------
-xpad = 30 
-ypad = 30 
-# ---------------------------------
-widthOfOrderFram=  880
-heightOfOrderFram= 350 
-xOfOrderFram= 986.6666
-yOfOrderFram= 420
-# -------------------------------------
-widthOfderiverFram= 880 
-heightOfderiverFram= 280 
-xOfderiverFram= 986.6666
-yOfderiverFram= 140
-# ---------------------------------------
-widthOffilterFram= 880 
-heightOffilterFram= 140 
-xOffilterFram= 986.6666
-yOffilterFram= 0
-# ---------------------------------------
-widthoforderTableFram = 880
-heightoforderTableFram = 350
-xOfOrderTableFram= 53.3
-yOfOrderTableFram= 0
-# ----------------------------------------
-widthofpaidTableFram = 880
-heightofpaidTableFram = 140
-xOfpaidTableFram= 53.3
-yOfpaidTableFram= 350
-# -----------------------------------
-widthofinfoFram = 880
-heightofinfoFram = 280
-xOfinfoFram= 53.3
-yOfinfoFram= 490
-# -----------------------------------
-win = ttk.Window(resizable=(False, False),title=title)
-win.geometry("1920x990+0+0")
-# قسم الطلبات 
-ordersFram = ttk.LabelFrame(win,text="  اضـافـة  الطلـبـات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
-# المحتويات
-insideFram1 = ttk.Frame(ordersFram,width=widthOfOrderFram)
-insideFram1.pack(side=TOP)
-# ------------------------
-firstTypeEntryvar = ttk.StringVar()
-firstTypeEntry = ttk.Entry(insideFram1,textvariable=firstTypeEntryvar,)
-firstTypeEntry.grid(row=0,column=0,padx=xpad,pady=ypad)
-firstTypelabel = ttk.Label(insideFram1,text="الخارجــي",)
-firstTypelabel.grid(row=0,column=1,pady=ypad)
-# ----------------
-secondTypeEntryvar = ttk.StringVar()
-secondTypeEntry = ttk.Entry(insideFram1,textvariable=secondTypeEntryvar,)
-secondTypeEntry.grid(row=0,column=2,padx=xpad,pady=ypad)
-secondTypelabel = ttk.Label(insideFram1,text="الداخلــي",)
-secondTypelabel.grid(row=0,column=3,pady=ypad)
-# ----------------
-apoveEntryvar = ttk.StringVar()
-apoveEntry = ttk.Entry(insideFram1,bootstyle="success",textvariable=apoveEntryvar,)
-apoveEntry.grid(row=1,column=0,padx=xpad,pady=0)
-apovelabel = ttk.Label(insideFram1,text="<الحافــز <ج",)
-apovelabel.grid(row=1,column=1,pady=0)
-# ----------------
-disEntryvar = ttk.StringVar()
-disEntry = ttk.Entry(insideFram1,bootstyle="danger",textvariable=disEntryvar,)
-disEntry.grid(row=1,column=2,padx=xpad,pady=0)
-dislabel = ttk.Label(insideFram1,text="<الخصــم <ج",)
-dislabel.grid(row=1,column=3,pady=0)
-# ----------------
-paidEntryvar = ttk.StringVar()
-paidEntry = ttk.Entry(insideFram1,bootstyle="warning",textvariable=paidEntryvar,)
-paidEntry.grid(row=2,column=0,padx=xpad,pady=ypad)
-paidlabel = ttk.Label(insideFram1,text="<المدفــوع <ج",)
-paidlabel.grid(row=2,column=1,pady=ypad)
-# --------------------------
-dateEntry = ttk.DateEntry(insideFram1)
-# dateEntry.entry.state(['readonly'])
-dateEntry.configure(width=17)
-dateEntry.grid(row=2,column=2,padx=xpad,pady=ypad)
-datelabel = ttk.Label(insideFram1,text="التاريــخ",)
-datelabel.grid(row=2,column=3,pady=ypad)
-# -----------------------------
-insideFram2 = ttk.Frame(ordersFram,width=widthOfOrderFram,height=50)
-insideFram2.pack()
-# ---------------------------------
-addOrderButton = ttk.Button(insideFram2,text="اضافــة الطلــب",bootstyle = "success")
-addOrderButton.configure(width=20)
-addOrderButton.place(x = 640,y=30,anchor='center')
-# -----------------------------------
-editOrderButton = ttk.Button(insideFram2,text="تعديــل")
-editOrderButton.configure(width=10)
-editOrderButton.place(x = 320,y=30,anchor='center')
-# ------------------------------------
-deleteOrderButton = ttk.Button(insideFram2,text="حــذف",bootstyle = "danger")
-deleteOrderButton.configure(width=10)
-deleteOrderButton.place(x = 130,y=30,anchor='center')
-# ------------------------------------
-ordersFram.place(x=xOfOrderFram,y=yOfOrderFram,width=widthOfOrderFram,height=heightOfOrderFram)
 # ------------------------------------------------
-# قسم الطلبات 
-deriverFram = ttk.LabelFrame(win,text="  اضـافـة  سائــق  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
-# المحتويات
-insideDeriverFram1 = ttk.Frame(deriverFram,width=widthOfOrderFram)
-insideDeriverFram1.pack(side=TOP)
-# ------------------------
-nameEntryvar = ttk.StringVar()
-nameEntry = ttk.Entry(insideDeriverFram1,textvariable=nameEntryvar,)
-nameEntry.grid(row=0,column=2,padx=xpad,pady=ypad)
-namelabel = ttk.Label(insideDeriverFram1,text="الاســم",)
-namelabel.grid(row=0,column=3,pady=ypad)
-# ----------------
-idEntryvar = ttk.StringVar()
-idEntry = ttk.Entry(insideDeriverFram1,textvariable=idEntryvar,)
-idEntry.grid(row=0,column=0,padx=xpad,pady=ypad)
-idlabel = ttk.Label(insideDeriverFram1,text="رقــم البطاقــة",)
-idlabel.grid(row=0,column=1,pady=ypad)
-# ----------------
-phoneEntryvar = ttk.StringVar()
-phoneEntry = ttk.Entry(insideDeriverFram1,textvariable=phoneEntryvar,)
-phoneEntry.grid(row=1,column=2,padx=xpad,pady=0)
-phonelabel = ttk.Label(insideDeriverFram1,text="رقــم الهاتــف",)
-phonelabel.grid(row=1,column=3,pady=0)
-# ----------------
-vehicleEntryvar = ttk.StringVar()
-vehicleEntry = ttk.Entry(insideDeriverFram1,textvariable=vehicleEntryvar,)
-vehicleEntry.grid(row=1,column=0,padx=xpad,pady=0)
-vehiclelabel = ttk.Label(insideDeriverFram1,text="لوحــة المــركبــة",)
-vehiclelabel.grid(row=1,column=1,pady=0)
-# ---------------------------------------------------------------
-insideDeriverFram2 = ttk.Frame(deriverFram,width=widthOfOrderFram,height=80)
-insideDeriverFram2.pack()
-# ---------------------------------
-addOrderButton = ttk.Button(insideDeriverFram2,text="اضافــة الســائق",bootstyle = "success",command=addingDriver)
-addOrderButton.configure(width=20)
-addOrderButton.place(x = 640,y=30,anchor='n')
-# -----------------------------------
-editOrderButton = ttk.Button(insideDeriverFram2,text="تعديــل")
-editOrderButton.configure(width=10)
-editOrderButton.place(x = 320,y=30,anchor='n')
-# ------------------------------------
-deleteOrderButton = ttk.Button(insideDeriverFram2,text="حــذف",bootstyle = "danger")
-deleteOrderButton.configure(width=10)
-deleteOrderButton.place(x = 130,y=30,anchor='n')
-# --------------------------------------
-deriverFram.place(x=xOfderiverFram,y=yOfderiverFram,width=widthOfderiverFram,height=heightOfderiverFram)
-# ------------------------------------
-# قسم البحث والفلترة
-filterFram = ttk.LabelFrame(win,text="  فلتــرة الطلبــات  ",width=widthOfOrderFram,height=heightOfOrderFram,relief="ridge",labelanchor='ne')
-# المحتويات
-choiceNameVar = ttk.StringVar()
-choiceName = ttk.Combobox(filterFram,state='readonly',textvariable=choiceNameVar,bootstyle='success')
-choiceName.config(width=18)
-choiceNameVar.set("اختـار الســائــق")
-choiceName.grid(row=0,column=2,padx=xpad,pady=ypad)
-# -----------------------------------
-choicemonthVar = ttk.StringVar()
-choicemonth = ttk.Combobox(filterFram,state='readonly',textvariable=choicemonthVar,)
-choicemonth.config(width=18)
-choicemonthVar.set("اختـار الشهــر")
-choicemonth.grid(row=0,column=1,padx=xpad,pady=ypad)
-# ------------------------------------
-choiceyearVar = ttk.StringVar()
-choiceyear = ttk.Combobox(filterFram,state='readonly',textvariable=choiceyearVar,)
-choiceyear.config(width=18)
-choiceyearVar.set("اختـار السنــة")
-choiceyear.grid(row=0,column=0,padx=xpad,pady=ypad)
-# ----------------------------------------------
-filterFram.place(x=xOffilterFram,y=yOffilterFram,width=widthOffilterFram,height=heightOffilterFram)
-# ----------------------------------------------
-#عرض الداتا
-# 
-# عرض الطلبات 
-orderTableFram= ttk.Frame(win)
-# create scrollx,y
-# scrollx = ttk.Scrollbar(orderTableFram,orient="horizontal")
-# scrollx.pack(side=BOTTOM,fill=X)
-scrolly = ttk.Scrollbar(orderTableFram,orient="vertical")
-scrolly.pack(side=RIGHT,fill=Y)
-# --------------------------------------------------------
-# create the table
-orderTable = ttk.Treeview(orderTableFram,columns=("date","ty1","ty2","aprove","dis","tot"),yscrollcommand=scrolly.set)
-# config scrollers
-# scrollx.config(command=orderTable.xview)
-scrolly.config(command=orderTable.yview)
-# ------------------------------------
-orderTable.heading("date",text="التــاريــخ")
-orderTable.heading("ty1",text="الداخلــي")
-orderTable.heading("ty2",text="الخارجــي")
-orderTable.heading("aprove",text="<الحافــز <ج")
-orderTable.heading("dis",text="<الخصــم <ج")
-orderTable.heading("tot",text="مجموع اليوم",)
-# -----------------------------------------------------
-orderTable.column( "date",width=110,anchor=CENTER)
-orderTable.column( "ty1",width=110,anchor=CENTER)
-orderTable.column("ty2",width=110,anchor=CENTER)
-orderTable.column( "aprove",width=120,anchor=CENTER)
-orderTable.column("dis",width=120,anchor=CENTER)
-orderTable.column("tot",width=130,anchor=CENTER)
-orderTable["show"]="headings"
-orderTable.pack(fill=BOTH,expand=2)
-# ---------------------------------
-orderTableFram.place(x=xOfOrderTableFram,y=yOfOrderTableFram,width=widthoforderTableFram,height=heightoforderTableFram)
-# --------------------------------
-
-# عرض الدفع
-paidTableFram= ttk.Frame(win)
-# create scrollxofpaidtable,y
-# scrollxofpaidtable = ttk.Scrollbar(paidTableFram,orient="horizontal")
-# scrollxofpaidtable.pack(side=BOTTOM,fill=X)
-scrollyofpaidtable = ttk.Scrollbar(paidTableFram,orient="vertical")
-scrollyofpaidtable.pack(side=RIGHT,fill=Y)
-# --------------------------------------------------------
-# create the table
-paidTable = ttk.Treeview(paidTableFram,columns=("date","total","paid","remind"),yscrollcommand=scrollyofpaidtable.set)
-# config scrollers
-# scrollxofpaidtable.config(command=paidTable.xview)
-scrollyofpaidtable.config(command=paidTable.yview)
-# ------------------------------------
-paidTable.heading("date",text="التــاريــخ")
-paidTable.heading("total",text="الحساب")
-paidTable.heading("paid",text="المدفوع")
-paidTable.heading("remind",text="المتبقي")
-# -----------------------------------------------------
-paidTable.column( "date",width=110,anchor=CENTER)
-paidTable.column( "total",width=110,anchor=CENTER)
-paidTable.column("paid",width=110,anchor=CENTER)
-paidTable.column( "remind",width=110,anchor=CENTER)
-paidTable["show"]="headings"
-paidTable.pack(fill=BOTH,expand=2)
-# ---------------------------------
-paidTableFram.place(x=xOfpaidTableFram,y=yOfpaidTableFram,width=widthofpaidTableFram,height=heightofpaidTableFram)
-# --------------------------------
-
-
-# عرض البيانات
-infoFram= ttk.Frame(win,relief=RIDGE)
-
-infoFram.place(x=xOfinfoFram,y=yOfinfoFram,width=widthofinfoFram,height=heightofinfoFram)
-# --------------------------------
-
-
-
-
-
-
-win.mainloop()
+title = 'DriverCash'
+class Drivercash :
+    def __init__(self,win) :
+    # first feching data
+        self.fechInfonameComb()
+        # -------------------------------------------
+        self.title = "DeriverCash"
+        self.xpad = 30 
+        self.ypad = 30 
+        # ---------------------------------
+        self.widthOforderFram=  880
+        self.heightOforderFram= 350 
+        self.xOforderFram= 986.6666
+        self.yOforderFram= 420
+        # -------------------------------------
+        self.widthOfderiverFram= 880 
+        self.heightOfderiverFram= 280 
+        self.xOfderiverFram= 986.6666
+        self.yOfderiverFram= 140
+        # ---------------------------------------
+        self.widthOffilterFram= 880 
+        self.heightOffilterFram= 140 
+        self.xOffilterFram= 986.6666
+        self.yOffilterFram= 0
+        # ---------------------------------------
+        self.widthOforderTableFram = 880
+        self.heightOforderTableFram = 350
+        self.xOforderTableFram= 53.3
+        self.yOforderTableFram= 0
+        # ----------------------------------------
+        self.widthOfpaidTableFram = 880
+        self.heightOfpaidTableFram = 140
+        self.xOfpaidTableFram= 53.3
+        self.yOfpaidTableFram= 350
+        # -----------------------------------
+        self.widthOfinfoFram = 880
+        self.heightOfinfoFram = 280
+        self.xOfinfoFram= 53.3
+        self.yOfinfoFram= 490
+        # -----------------------------------
+        
+        win.geometry("1920x990+0+0")
+        # قسم الطلبات 
+        self.ordersFram = ttk.LabelFrame(win,text="  اضـافـة  الطلـبـات  ",width=self.widthOforderFram,height=self.heightOforderFram,relief="ridge",labelanchor='ne')
+        # المحتويات
+        self.insideFram1 = ttk.Frame(self.ordersFram,width=self.widthOforderFram)
+        self.insideFram1.pack(side=TOP)
+        # ------------------------
+        self.firstTypeEntryvar = ttk.StringVar()
+        self.firstTypeEntry = ttk.Entry(self.insideFram1,textvariable=self.firstTypeEntryvar,)
+        self.firstTypeEntry.grid(row=0,column=0,padx=self.xpad,pady=self.ypad)
+        self.firstTypelabel = ttk.Label(self.insideFram1,text="الخارجــي",)
+        self.firstTypelabel.grid(row=0,column=1,pady=self.ypad)
+        # ----------------
+        self.secondTypeEntryvar = ttk.StringVar()
+        self.secondTypeEntry = ttk.Entry(self.insideFram1,textvariable=self.secondTypeEntryvar,)
+        self.secondTypeEntry.grid(row=0,column=2,padx=self.xpad,pady=self.ypad)
+        self.secondTypelabel = ttk.Label(self.insideFram1,text="الداخلــي",)
+        self.secondTypelabel.grid(row=0,column=3,pady=self.ypad)
+        # ----------------
+        self.apoveEntryvar = ttk.StringVar()
+        self.apoveEntry = ttk.Entry(self.insideFram1,bootstyle="success",textvariable=self.apoveEntryvar,)
+        self.apoveEntry.grid(row=1,column=0,padx=self.xpad,pady=0)
+        self.apovelabel = ttk.Label(self.insideFram1,text="<الحافــز <ج",)
+        self.apovelabel.grid(row=1,column=1,pady=0)
+        # ----------------
+        self.disEntryvar = ttk.StringVar()
+        self.disEntry = ttk.Entry(self.insideFram1,bootstyle="danger",textvariable=self.disEntryvar,)
+        self.disEntry.grid(row=1,column=2,padx=self.xpad,pady=0)
+        self.dislabel = ttk.Label(self.insideFram1,text="<الخصــم <ج",)
+        self.dislabel.grid(row=1,column=3,pady=0)
+        # ----------------
+        self.idEntryvar = ttk.StringVar()
+        self.idEntry = ttk.Entry(self.insideFram1,bootstyle="warning",textvariable=self.idEntryvar,)
+        self.idEntry.grid(row=2,column=0,padx=self.xpad,pady=self.ypad)
+        self.idlabel = ttk.Label(self.insideFram1,text="<المدفــوع <ج",)
+        self.idlabel.grid(row=2,column=1,pady=self.ypad)
+        # --------------------------
+        self.dateEntry = ttk.DateEntry(self.insideFram1)
+        # self.dateEntry.entry.state(['readonly'])
+        self.dateEntry.configure(width=17)
+        self.dateEntry.grid(row=2,column=2,padx=self.xpad,pady=self.ypad)
+        self.dateLable = ttk.Label(self.insideFram1,text="التاريــخ",)
+        self.dateLable.grid(row=2,column=3,pady=self.ypad)
+        # -----------------------------
+        self.insideFram2 = ttk.Frame(self.ordersFram,width=self.widthOforderFram,height=50)
+        self.insideFram2.pack()
+        # ---------------------------------
+        self.addOrderButton = ttk.Button(self.insideFram2,text="اضافــة الطلــب",bootstyle = "success")
+        self.addOrderButton.configure(width=20)
+        self.addOrderButton.place(x = 640,y=30,anchor='center')
+        # -----------------------------------
+        self.editOrderButton = ttk.Button(self.insideFram2,text="تعديــل")
+        self.editOrderButton.configure(width=10)
+        self.editOrderButton.place(x = 320,y=30,anchor='center')
+        # ------------------------------------
+        self.deleteOrderButton = ttk.Button(self.insideFram2,text="حــذف",bootstyle = "danger")
+        self.deleteOrderButton.configure(width=10)
+        self.deleteOrderButton.place(x = 130,y=30,anchor='center')
+        # ------------------------------------
+        self.ordersFram.place(x=self.xOforderFram,y=self.yOforderFram,width=self.widthOforderFram,height=self.heightOforderFram)
+        # ------------------------------------------------
+        # قسم الطلبات 
+        self.deriverFram = ttk.LabelFrame(win,text="  اضـافـة  سائــق  ",width=self.widthOforderFram,height=self.heightOforderFram,relief="ridge",labelanchor='ne')
+        # المحتويات
+        self.insideDriverFrame1 = ttk.Frame(self.deriverFram,width=self.widthOforderFram)
+        self.insideDriverFrame1.pack(side=TOP)
+        # ------------------------
+        self.nameEntryvar = ttk.StringVar()
+        self.nameEntry = ttk.Entry(self.insideDriverFrame1,textvariable=self.nameEntryvar,)
+        self.nameEntry.grid(row=0,column=2,padx=self.xpad,pady=self.ypad)
+        self.namelabel = ttk.Label(self.insideDriverFrame1,text="الاســم",)
+        self.namelabel.grid(row=0,column=3,pady=self.ypad)
+        # ----------------
+        self.idEntryvar = ttk.StringVar()
+        self.idEntry = ttk.Entry(self.insideDriverFrame1,textvariable=self.idEntryvar,)
+        self.idEntry.grid(row=0,column=0,padx=self.xpad,pady=self.ypad)
+        self.idlabel = ttk.Label(self.insideDriverFrame1,text="رقــم البطاقــة",)
+        self.idlabel.grid(row=0,column=1,pady=self.ypad)
+        # ----------------
+        self.phoneEntryvar = ttk.StringVar()
+        self.phoneEntry = ttk.Entry(self.insideDriverFrame1,textvariable=self.phoneEntryvar,)
+        self.phoneEntry.grid(row=1,column=2,padx=self.xpad,pady=0)
+        self.phonelabel = ttk.Label(self.insideDriverFrame1,text="رقــم الهاتــف",)
+        self.phonelabel.grid(row=1,column=3,pady=0)
+        # ----------------
+        self.vehicleEntryvar = ttk.StringVar()
+        self.vehicleEntry = ttk.Entry(self.insideDriverFrame1,textvariable=self.vehicleEntryvar,)
+        self.vehicleEntry.grid(row=1,column=0,padx=self.xpad,pady=0)
+        self.vehiclelabel = ttk.Label(self.insideDriverFrame1,text="لوحــة المــركبــة",)
+        self.vehiclelabel.grid(row=1,column=1,pady=0)
+        # ---------------------------------------------------------------
+        self.insideDeriverFram2 = ttk.Frame(self.deriverFram,width=self.widthOforderFram,height=80)
+        self.insideDeriverFram2.pack()
+        # ---------------------------------
+        self.addOrderButton = ttk.Button(self.insideDeriverFram2,text="اضافــة الســائق",bootstyle = "success",command=self.addingDriver)
+        self.addOrderButton.configure(width=20)
+        self.addOrderButton.place(x = 640,y=30,anchor='n')
+        # -----------------------------------
+        self.editOrderButton = ttk.Button(self.insideDeriverFram2,text="تعديــل")
+        self.editOrderButton.configure(width=10)
+        self.editOrderButton.place(x = 320,y=30,anchor='n')
+        # ------------------------------------
+        self.deleteOrderButton = ttk.Button(self.insideDeriverFram2,text="حــذف",bootstyle = "danger")
+        self.deleteOrderButton.configure(width=10)
+        self.deleteOrderButton.place(x = 130,y=30,anchor='n')
+        # --------------------------------------
+        self.deriverFram.place(x=self.xOfderiverFram,y=self.yOfderiverFram,width=self.widthOfderiverFram,height=self.heightOfderiverFram)
+        # ------------------------------------
+        # قسم البحث والفلترة
+        self.filterFram = ttk.LabelFrame(win,text="  فلتــرة الطلبــات  ",width=self.widthOforderFram,height=self.heightOforderFram,relief="ridge",labelanchor='ne')
+        # المحتويات
+        self.choicenameVar = ttk.StringVar()
+        self.choicename = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choicenameVar,bootstyle='success')
+        self.choicename.config(width=18)
+        self.choicenameVar.set("اختـار الســائــق")
+        self.choicename.grid(row=0,column=2,padx=self.xpad,pady=self.ypad)
+        # -----------------------------------
+        self.choicemonthVar = ttk.StringVar()
+        self.choicemonth = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choicemonthVar,)
+        self.choicemonth.config(width=18)
+        self.choicemonthVar.set("اختـار الشهــر")
+        self.choicemonth.grid(row=0,column=1,padx=self.xpad,pady=self.ypad)
+        # ------------------------------------
+        self.choiceyearVar = ttk.StringVar()
+        self.choiceyear = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choiceyearVar,)
+        self.choiceyear.config(width=18)
+        self.choiceyearVar.set("اختـار السنــة")
+        self.choiceyear.grid(row=0,column=0,padx=self.xpad,pady=self.ypad)
+        # ----------------------------------------------
+        self.filterFram.place(x=self.xOffilterFram,y=self.yOffilterFram,width=self.widthOffilterFram,height=self.heightOffilterFram)
+        # ----------------------------------------------
+        #عرض الداتا
+        # 
+        # عرض الطلبات 
+        self.orderTableFram= ttk.Frame(win)
+        # create scrollx,y
+        # scrollx = ttk.Scrollbar(self.orderTableFram,orient="horizontal")
+        # scrollx.pack(side=BOTTOM,fill=X)
+        self.scrolly = ttk.Scrollbar(self.orderTableFram,orient="vertical")
+        self.scrolly.pack(side=RIGHT,fill=Y)
+        # --------------------------------------------------------
+        # create the table
+        self.orderTable = ttk.Treeview(self.orderTableFram,columns=("date","ty1","ty2","aprove","dis","tot"),yscrollcommand=self.scrolly.set)
+        # config scrollers
+        # scrollx.config(command=self.orderTable.xview)
+        self.scrolly.config(command=self.orderTable.yview)
+        # ------------------------------------
+        self.orderTable.heading("date",text="التــاريــخ")
+        self.orderTable.heading("ty1",text="الداخلــي")
+        self.orderTable.heading("ty2",text="الخارجــي")
+        self.orderTable.heading("aprove",text="<الحافــز <ج")
+        self.orderTable.heading("dis",text="<الخصــم <ج")
+        self.orderTable.heading("tot",text="مجموع اليوم",)
+        # -----------------------------------------------------
+        self.orderTable.column( "date",width=110,anchor=CENTER)
+        self.orderTable.column( "ty1",width=110,anchor=CENTER)
+        self.orderTable.column("ty2",width=110,anchor=CENTER)
+        self.orderTable.column( "aprove",width=120,anchor=CENTER)
+        self.orderTable.column("dis",width=120,anchor=CENTER)
+        self.orderTable.column("tot",width=130,anchor=CENTER)
+        self.orderTable["show"]="headings"
+        self.orderTable.pack(fill=BOTH,expand=2)
+        # ---------------------------------
+        self.orderTableFram.place(x=self.xOforderTableFram,y=self.yOforderTableFram,width=self.widthOforderTableFram,height=self.heightOforderTableFram)
+        # --------------------------------
+        # عرض الدفع
+        self.paidTableFram= ttk.Frame(win)
+        # create scrollxOfpaidtable,y
+        # scrollxOfpaidtable = ttk.Scrollbar(self.paidTableFram,orient="horizontal")
+        # scrollxOfpaidtable.pack(side=BOTTOM,fill=X)
+        self.scrollyofpaidtable = ttk.Scrollbar(self.paidTableFram,orient="vertical")
+        self.scrollyofpaidtable.pack(side=RIGHT,fill=Y)
+        # --------------------------------------------------------
+        # create the table
+        self.paidTable = ttk.Treeview(self.paidTableFram,columns=("date","total","self.paid","remind"),yscrollcommand=self.scrollyofpaidtable.set)
+        # config scrollers
+        # scrollxOfpaidtable.config(command=self.paidTable.xview)
+        self.scrollyofpaidtable.config(command=self.paidTable.yview)
+        # ------------------------------------
+        self.paidTable.heading("date",text="التــاريــخ")
+        self.paidTable.heading("total",text="الحساب")
+        self.paidTable.heading("self.paid",text="المدفوع")
+        self.paidTable.heading("remind",text="المتبقي")
+        # -----------------------------------------------------
+        self.paidTable.column( "date",width=110,anchor=CENTER)
+        self.paidTable.column( "total",width=110,anchor=CENTER)
+        self.paidTable.column("self.paid",width=110,anchor=CENTER)
+        self.paidTable.column( "remind",width=110,anchor=CENTER)
+        self.paidTable["show"]="headings"
+        self.paidTable.pack(fill=BOTH,expand=2)
+        # ---------------------------------
+        self.paidTableFram.place(x=self.xOfpaidTableFram,y=self.yOfpaidTableFram,width=self.widthOfpaidTableFram,height=self.heightOfpaidTableFram)
+        # --------------------------------
+        # عرض البيانات
+        self.infoFram= ttk.Frame(win,relief=RIDGE)
+        self.infoFram.place(x=self.xOfinfoFram,y=self.yOfinfoFram,width=self.widthOfinfoFram,height=self.heightOfinfoFram)
+        # -----------------------------------------functions
+    #اضافة سائق
+    def addingDriver(self):
+        self.name = self.nameEntryvar.get().strip()
+        self.driverID = self.idEntryvar.get().strip()
+        self.phone = self.phoneEntryvar.get().strip()
+        self.vehicle = self.vehicleEntryvar.get().strip()
+        if  (self.name=='')or not(self.name[0].isalpha()): #self.name conditions
+            if (self.name==''):
+                messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ادخــال اســم السائــق")
+            else :
+                messagebox.showerror("خطــأ فــي ادخــال اســم الســائــق","برجـاء ازالــة الارقــام والعلامــات مــن الاســم")
+        else :
+            if (len(self.driverID)!= 14  or not((self.driverID).isdigit()) ) and (self.driverID!=''): #id conditions
+                messagebox.showerror("خطــأ فــي ادخــال رقــم البطــاقــة","برجـاء ادخــال رقــم البطــاقة مكــون من 14 رقــم")
+            else:
+                if ((len(self.phone)!=11) or not(self.phone[0]=='0')or not(self.phone[1]=='1') or not(self.phone.isdigit()) )and self.phone!='': #self.phone conditions
+                    messagebox.showerror("خطــأ فــي ادخــال رقــم الهاتــف","برجـاء ادخــال رقــم الهاتــف مكــون من 11 رقــم يبــدء بــ 01")
+                else :
+                    if (len(self.vehicle)>20) :# vechial conditions
+                        messagebox.showerror("خطــأ فــي ادخــال رقــم لوحــة المركبــة","ادخــال لوحــة المركبــة اكبــر مــن الــلازم")
+                    else:
+                        # reset 0 to optinal values
+                        if (self.vehicle==''):
+                            self.vehicle='0'
+                        if (self.driverID==''):
+                            self.driverID ='0'  
+                        if (self.phone==''):
+                            self.phone = '0'
+                        #اضافة السائق في قاعدة البيانات
+                        data = sqlite3.connect("deriverscash.db")
+                        mycursor = data.cursor()
+                        # check if there is driver with that self.name or not
+                        checkMultiplableString = f'select name from driveresinfo where name = "{self.name}"'
+                        mycursor.execute(checkMultiplableString)
+                        self.names = mycursor.fetchall()
+                        if len(self.names) >= 1 :
+                            # if yes message to tryagin
+                            messagebox.showwarning("تكــرار السائــق","يوجــد سائــق بهــذا الاســم")
+                        else:
+                            print(len(self.names))
+                            stringaddingInfo=f"insert into driveresinfo values('{self.name}','{self.driverID}','{self.vehicle}','{self.phone}')"
+                            # string Make a Table for driver
+                            driverTable=f"create table {self.name} (ty1 INT NULL , ty2 INT NULL ,aprove INT NUll , dis INT NULL) "
+                            print(stringaddingInfo)
+                            print(driverTable)
+                            try:
+                                mycursor.execute(stringaddingInfo)
+                                mycursor.execute(driverTable)
+                                messagebox.showinfo("عمليــة ناجحــة","تــم اضافــة السائــق بنجــاح")
+                            except:
+                                messagebox.showerror("خطــأ فــي ادخــال البيانــات","برجـاء مراجعــة البيانــات والمحاولــة مــرة أخــري")
+                        data.commit()
+                        data.close()
+                        self.fechInfonameComb()
+    # ------------------------------------------
+    def editingInfo():
+        pass
+    # -------------------------------------------
+    def deleteDriver() :
+        pass
+    # -------------------------------------------
+    def fechInfonameComb(self,):
+        data = sqlite3.connect("deriverscash.db")
+        mycursor = data.cursor() 
+        stringnames="select name from driveresinfo"
+        mycursor.execute(stringnames)
+        self.driversnames=[]
+        rows = mycursor.fetchall()
+        for i in range(len(rows)):
+            self.driversnames.append(rows[i][0])
+        data.commit()
+        data.close()
+        self.choicename['values'] = self.driversnames
+    # ===========================================
+if __name__=="__main__":
+    win =  ttk.Window(resizable=(False, False),title=title)
+    obj = Drivercash(win)
+    win.mainloop()
+    # -------------------------------------------
