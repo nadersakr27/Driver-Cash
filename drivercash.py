@@ -9,11 +9,12 @@ mycursor.execute("create table if not exists driveresinfo (name varchar(255) not
 data.commit()
 data.close()
 # ------------------------------------------------
+driversnames=[]
 title = 'DriverCash'
 class Drivercash :
     def __init__(self,win) :
     # first feching data
-        self.fechInfonameComb()
+       
         # -------------------------------------------
         self.title = "DeriverCash"
         self.xpad = 30 
@@ -163,21 +164,23 @@ class Drivercash :
         # المحتويات
         self.choicenameVar = ttk.StringVar()
         self.choicename = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choicenameVar,bootstyle='success')
-        self.choicename.config(width=18)
+        self.choicename.config(width=17)
         self.choicenameVar.set("اختـار الســائــق")
-        self.choicename.grid(row=0,column=2,padx=self.xpad,pady=self.ypad)
+        self.choicename.grid(row=0,column=2,padx=self.xpad+28,pady=self.ypad)
+        self.fechInfonameComb()
+        self.choicename.bind("<<ComboboxSelected>>",self.viewInfoData)
         # -----------------------------------
         self.choicemonthVar = ttk.StringVar()
         self.choicemonth = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choicemonthVar,)
-        self.choicemonth.config(width=18)
+        self.choicemonth.config(width=17)
         self.choicemonthVar.set("اختـار الشهــر")
-        self.choicemonth.grid(row=0,column=1,padx=self.xpad,pady=self.ypad)
+        self.choicemonth.grid(row=0,column=1,padx=self.xpad-28,pady=self.ypad)
         # ------------------------------------
         self.choiceyearVar = ttk.StringVar()
         self.choiceyear = ttk.Combobox(self.filterFram,state='readonly',textvariable=self.choiceyearVar,)
-        self.choiceyear.config(width=18)
+        self.choiceyear.config(width=17)
         self.choiceyearVar.set("اختـار السنــة")
-        self.choiceyear.grid(row=0,column=0,padx=self.xpad,pady=self.ypad)
+        self.choiceyear.grid(row=0,column=0,padx=self.xpad+28,pady=self.ypad)
         # ----------------------------------------------
         self.filterFram.place(x=self.xOffilterFram,y=self.yOffilterFram,width=self.widthOffilterFram,height=self.heightOffilterFram)
         # ----------------------------------------------
@@ -245,6 +248,36 @@ class Drivercash :
         # --------------------------------
         # عرض البيانات
         self.infoFram= ttk.Frame(win,relief=RIDGE)
+        self.insideframeinfo1 = ttk.Frame(self.infoFram,relief=RIDGE,height=140)
+        self.insideframeinfo1.place(x=0,y=0,height=0.5*self.heightOfinfoFram,width=self.widthOfinfoFram)
+        self.viewnamevar = ttk.StringVar()
+        self.stringname =  ttk.Label(self.insideframeinfo1 ,text=" : الاســم",font=("",15,"bold"))
+        self.viewname= ttk.Label(self.insideframeinfo1,text="نادر ناصر صقر " ,font=("",18,"bold"))
+        self.stringname.grid(row=1,column=3)
+        self.viewname.grid(row=1,column=2,pady=self.ypad,padx=self.xpad+25)
+# ---------------------------------------------------------------------------
+        self.viewidvar = ttk.StringVar()
+        self.stringid =  ttk.Label(self.insideframeinfo1 ,text=": رقــم البطاقــة",font=("",15,"bold"))
+        self.viewid= ttk.Label(self.insideframeinfo1,text="30106291100454" ,font=("",18,"bold"))
+        self.stringid.grid(row=1,column=1)
+        self.viewid.grid(row=1,column=0,pady=self.ypad+20,padx=self.xpad+25) 
+# ---------------------------------------------------------------------
+        self.insideframeinfo2 = ttk.Frame(self.infoFram,relief=RIDGE)
+        self.insideframeinfo2.place(x=0,y=0.5*self.heightOfinfoFram,height=0.5*self.heightOfinfoFram,width=self.widthOfinfoFram)
+        self.viewphonevar = ttk.StringVar()
+        self.stringphone =  ttk.Label(self.insideframeinfo2 ,text=" : رقــم الهاتــف",font=("",15,"bold"))
+        self.viewphone= ttk.Label(self.insideframeinfo2,text="01288235749" ,font=("",18,"bold"))
+        self.stringphone.grid(row=1,column=3)
+        self.viewphone.grid(row=1,column=2,pady=self.ypad,padx=self.xpad+25)
+# ---------------------------------------------------------------------------
+        self.viewvehiclevar = ttk.StringVar()
+        self.stringvehicle =  ttk.Label(self.insideframeinfo2 ,text=" : رقــم المركبة",font=("",15,"bold"))
+        self.viewvehicle= ttk.Label(self.insideframeinfo2,text="1051س م ص" ,font=("",18,"bold"))
+        self.stringvehicle.grid(row=1,column=1)
+        self.viewvehicle.grid(row=1,column=0,pady=self.ypad+20,padx=self.xpad+25) 
+# ---------------------------------------------------------------------
+    
+# ---------------------------------------------------------------------
         self.infoFram.place(x=self.xOfinfoFram,y=self.yOfinfoFram,width=self.widthOfinfoFram,height=self.heightOfinfoFram)
         # -----------------------------------------functions
     #اضافة سائق
@@ -294,18 +327,22 @@ class Drivercash :
                             print(driverTable)
                             try:
                                 mycursor.execute(stringaddingInfo)
-                                mycursor.execute(driverTable)
+                                # mycursor.execute(driverTable)
+                                # driversnames.append(self.nameEntryvar.get())
+                                # self.choicename['values']= driversnames
                                 messagebox.showinfo("عمليــة ناجحــة","تــم اضافــة السائــق بنجــاح")
                             except:
                                 messagebox.showerror("خطــأ فــي ادخــال البيانــات","برجـاء مراجعــة البيانــات والمحاولــة مــرة أخــري")
                         data.commit()
-                        data.close()
-                        self.fechInfonameComb()
+                        data.close()     
     # ------------------------------------------
     def editingInfo():
         pass
     # -------------------------------------------
-    def deleteDriver() :
+    def viewInfoData(self,*args):
+        self.viewNamevar.set(self.choicename.get())
+    # -------------------------------------------
+    def deleteDriver(self) :
         pass
     # -------------------------------------------
     def fechInfonameComb(self,):
@@ -313,13 +350,13 @@ class Drivercash :
         mycursor = data.cursor() 
         stringnames="select name from driveresinfo"
         mycursor.execute(stringnames)
-        self.driversnames=[]
+        
         rows = mycursor.fetchall()
         for i in range(len(rows)):
-            self.driversnames.append(rows[i][0])
+            driversnames.append(rows[i][0])
         data.commit()
         data.close()
-        # self.choicename['values'] = self.driversnames
+        self.choicename['values'] = driversnames
     # ===========================================
 if __name__=="__main__":
     win =  ttk.Window(resizable=(False, False),title=title)
